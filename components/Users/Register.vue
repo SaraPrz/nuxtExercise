@@ -1,18 +1,18 @@
 <template>
-  <v-form
+    <v-form
     ref="form"
     v-model="valid"
     lazy-validation
-  >
+    >
     <v-text-field
-      v-model="name"
+      v-model="userData.name"
       :counter="10"
       :rules="nameRules"
       label="First Name"
       required
     ></v-text-field>
     <v-text-field
-      v-model="lastName"
+      v-model="userData.lastName"
       :counter="15"
       :rules="lNameRules"
       label="Last Name"
@@ -28,10 +28,10 @@
     ></v-text-field>
 
     <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
+        v-model="email"
+        :rules="emailRules"
+        label="E-mail"
+        required
     ></v-text-field>
     <v-text-field
       v-model="password"
@@ -77,7 +77,7 @@
       class="mr-4"
       @click="validate"
     >
-      Validate
+        Validate
     </v-btn>
 
     <v-btn
@@ -94,66 +94,82 @@
     >
       Reset Validation
     </v-btn>
-  </v-form>
-</template>
+    <v-btn
+      @click="sendData"
+    >
+      post data
+    </v-btn>
+    </v-form>
+    </template>
 
-<script>
-export default {
-	name : "Register",
-	data() {
-		return {
-      valid: true,
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10 && v.length >= 4) || 'Name must be more than 4 and less than 10 characters',
-      ],
-      lNameRules: [
-        v => !!v || 'Last Name is required',
-        v => (v && v.length <= 15 && v.length >= 4) || 'Name must be more than 4 and less than 15 characters',
-      ],
-      phoneRules: [
-        v => !!v || 'Phone number is required',
-        v => /^(\+98|0098|98|0)?9\d{9}$/.test(v) || 'phone number must start with 09 , 9 , +989 '
-      ],
-      emailRules : [
-        v => !!v || 'Email is required',
-        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-      ],
-        items: [
-          'Florida',
-          'Georgia',
-          'Nebraska',
-          'California',
-          'New York',
+    <script>
+    export default {
+    name : "Register",
+    data() {
+      return {
+        valid: true,
+        nameRules: [
+          v => !!v || 'Name is required',
+          v => (v && v.length <= 10 && v.length >= 4) || 'Name must be more than 4 and less than 10 characters',
         ],
-      userPassword: "",
-      value: true,
-      rules: {
+        lNameRules: [
+          v => !!v || 'Last Name is required',
+          v => (v && v.length <= 15 && v.length >= 4) || 'Name must be more than 4 and less than 15 characters',
+        ],
+        phoneRules: [
+          v => !!v || 'Phone number is required',
+          v => /^(\+98|0098|98|0)?9\d{9}$/.test(v) || 'phone number must start with 09 , 9 , +989 '
+        ],
+        emailRules : [
+          v => !!v || 'Email is required',
+          v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        ],
+        items: [
+            'Florida',
+            'Georgia',
+            'Nebraska',
+            'California',
+            'New York',
+        ],
+        userPassword: "",
+        value: true,
+        rules: {
         required: value => !!value || "Required.",
         password: value => {
-          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-          return (
+            const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+            return (
             pattern.test(value) ||
             "Min. 8 characters with at least one capital letter, a number ."
-          );
+            );
         }
-      },
-      pwdConfirm:[ v => !!v || 'Confirm password', v => v === this.password || 'Passwords do not match'],
-      show1: false,
-      show2: false,
-      checkbox: false
-		}
-	},
+        },
+        pwdConfirm:[ v => !!v || 'Confirm password', v => v === this.password || 'Passwords do not match'],
+        show1: false,
+        show2: false,
+        checkbox: false,
+        userData: {
+          name: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+          password: '',
+        }
+      }
+    },
     methods: {
     validate () {
-      this.$refs.form.validate()
+        this.$refs.form.validate()
     },
     reset () {
-      this.$refs.form.reset()
+        this.$refs.form.reset()
     },
     resetValidation () {
-      this.$refs.form.resetValidation()
+        this.$refs.form.resetValidation()
     },
+    sendData() {
+      this.$emit('userData' , this.userData);
+      console.log(this.userData)
+    }
   },
 }
 </script>
